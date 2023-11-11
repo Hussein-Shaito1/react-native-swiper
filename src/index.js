@@ -280,11 +280,11 @@ export default class extends Component {
     } else if (this.state && this.state.height) {
       initState.height = this.state.height
     } else {
-      initState.height = height
+     // initState.height = height
     }
 
     initState.offset[initState.dir] =
-      initState.dir === 'y' ? initState.height * props.index : initState.width * props.index
+      initState.dir === 'y' ? height * props.index : width * props.index
 
     this.internals = {
       ...this.internals,
@@ -321,11 +321,8 @@ export default class extends Component {
     // related to https://github.com/leecade/react-native-swiper/issues/570
     // contentOffset is not working in react 0.48.x so we need to use scrollTo
     // to emulate offset.
-    if(this.state.total > 1) {
+    if (this.initialRender && this.state.total > 1) {
       this.scrollView.scrollTo({ ...offset, animated: false })
-    }
-	
-    if (this.initialRender) {
       this.initialRender = false
     }
 
@@ -467,7 +464,7 @@ export default class extends Component {
     if (!this.internals.offset)
       // Android not setting this onLayout first? https://github.com/leecade/react-native-swiper/issues/582
       this.internals.offset = {}
-    const diff = offset[dir] - (this.internals.offset[dir] || 0)
+    const diff = offset[dir] - this.internals.offset[dir]
     const step = dir === 'x' ? state.width : state.height
     let loopJump = false
 
